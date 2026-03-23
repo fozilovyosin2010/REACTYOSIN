@@ -30,7 +30,7 @@ const Layout = () => {
           </button>
         </div>
       </div>
-      <div className="main min-h-screen bg-black text-[#fff] p-[10px_20px]">
+      <div className="main min-h-screen bg-black pb-[40px] text-[#fff] p-[10px_20px]">
         <Outlet />
       </div>
       <div className="footer border-t border-t-[#ccc] bg-black text-[#fff] p-[10px_20px]">

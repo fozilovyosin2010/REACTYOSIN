@@ -129,7 +129,7 @@ const Home = () => {
         <div className="font-bold text-[28px] flex justify-center">
           Frequently Asked Questions
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mt-[40px]">
           {accordionList.map((e) => {
             return <Accordion key={e.id} {...e} />;
           })}
