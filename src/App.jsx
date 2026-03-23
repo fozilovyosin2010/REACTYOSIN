@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import Services from "./pages/Services";
 import Careers from "./pages/Careers";
 import CarDet from "./pages/CarDet";
+import Contact from "./pages/Contact";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const App = () => {
         { path: "/services", element: <Services /> },
         { path: "/careers", element: <Careers /> },
         { path: "/career_details", element: <CarDet /> },
+        { path: "/contact", element: <Contact /> },
         { path: "*", element: <NotFound /> },
       ],
     },
