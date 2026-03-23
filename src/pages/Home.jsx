@@ -18,6 +18,7 @@ import serverIcon from "../img/serverIcon.png";
 import analIcon from "../img/analIcon.png";
 import aiIcon from "../img/aiIcon.png";
 import Card from "../Components/Card";
+import Accordion from "../Components/Accordion";
 
 const miniConList = [
   zapierIcon,
@@ -43,6 +44,34 @@ const serviceList = [
     img: serverIcon,
     header: "Data Engineering",
     text: "Build robust data pipelines and infrastructure for ML operations.",
+  },
+];
+
+const accordionList = [
+  {
+    id: "01",
+    header: "What services does Catalyst Analytics provide?",
+    text: "Catalyst Analytics offers a range of services including design, engineering, and project management. We specialize in user experience design, web development, mobile app development, custom software development, branding and identity, and more.",
+  },
+  {
+    id: "02",
+    header: "What services does Catalyst Analytics provide?",
+    text: "Catalyst Analytics offers a range of services including design, engineering, and project management. We specialize in user experience design, web development, mobile app development, custom software development, branding and identity, and more.",
+  },
+  {
+    id: "03",
+    header: "What services does Catalyst Analytics provide?",
+    text: "Catalyst Analytics offers a range of services including design, engineering, and project management. We specialize in user experience design, web development, mobile app development, custom software development, branding and identity, and more.",
+  },
+  {
+    id: "04",
+    header: "What services does Catalyst Analytics provide?",
+    text: "Catalyst Analytics offers a range of services including design, engineering, and project management. We specialize in user experience design, web development, mobile app development, custom software development, branding and identity, and more.",
+  },
+  {
+    id: "05",
+    header: "What services does Catalyst Analytics provide?",
+    text: "Catalyst Analytics offers a range of services including design, engineering, and project management. We specialize in user experience design, web development, mobile app development, custom software development, branding and identity, and more.",
   },
 ];
 const Home = () => {
@@ -93,6 +122,16 @@ const Home = () => {
         <div className="flex justify-between">
           {serviceList.map((e, i) => {
             return <Card key={i} {...e} />;
+          })}
+        </div>
+      </div>
+      <div className="container3 m-[100px_auto_0] barlow max-w-[700px]">
+        <div className="font-bold text-[28px] flex justify-center">
+          Frequently Asked Questions
+        </div>
+        <div className="flex flex-col gap-3">
+          {accordionList.map((e) => {
+            return <Accordion key={e.id} {...e} />;
           })}
         </div>
       </div>
