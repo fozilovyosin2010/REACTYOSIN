@@ -9,3 +9,9 @@
   font-family: "Barlow", sans-serif;
   font-style: normal;
 }
+
+.linear_b {
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #0a84ff, #8961ff) 1;
+}
