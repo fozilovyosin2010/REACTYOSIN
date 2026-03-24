@@ -87,8 +87,9 @@ const Services = () => {
   ];
   return (
     <div className="section">
-      <div className="container1 bg-[url('./src/img/backVec1.png')] flex items-center rounded-[20px] flex justify-between barlow">
-        <div className="block p-[20px_40px]">
+      <div className="container1  flex justify-between items-center relative bg-[rgb(20,20,20)] rounded-[20px] barlow">
+        <div className="bg-[url('./src/img/Group24.png')] absolute top-0 w-full bottom-0 z-20"></div>
+        <div className="block bg-[url('./src/img/backVec1.png')] bg-transparent z-10 p-[20px_40px]">
           <div className="text-[30px] font-bold">
             Our Comprehensive
             <span className="text-blue-600"> Digital Solutions</span>
