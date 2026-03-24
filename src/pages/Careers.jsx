@@ -7,7 +7,9 @@ import mobileIcon from "../img/mobileIcon.svg";
 import webIcon from "../img/webIcon.svg";
 import bagIcon from "../img/bagIcon.svg";
 import appIcon from "../img/appIcon.svg";
+
 import CardVac from "../Components/CardVac";
+
 const Careers = () => {
   const careerList = [
     {
@@ -28,7 +30,7 @@ const Careers = () => {
     },
 
     {
-      img: mobileIcon,
+      img: appIcon,
       header: "Digital Marketing Specialist",
       selList: ["50,000", "65,000"],
       exp: 3,
@@ -86,7 +88,7 @@ const Careers = () => {
       </div>
 
       <div className="container2 section barlow mt-[120px]">
-        <div className="flex justify-center text-[25px] font-bold pb-[40px]">
+        <div className="flex justify-center text-[25px] font-bold py-[40px]">
           Open Positions
         </div>
         <div className="grid grid-cols-2 gap-[20px] max-w-[1266px] m-[0_auto]">
