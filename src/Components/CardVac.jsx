@@ -20,7 +20,7 @@ const CardVac = ({ img, header, selList, exp, deadLine, text }) => {
               <span className="text-[#ccc]">Salary</span>
               <ul className="list-disc marker:text-blue-500">
                 <li>
-                  {`$${selList[0]}-$${selList[1]}`}
+                  {`$${selList[0]} - $${selList[1]}`}
                   <span className="text-[#ccc]"> per year</span>
                 </li>
               </ul>
@@ -48,7 +48,7 @@ const CardVac = ({ img, header, selList, exp, deadLine, text }) => {
         </div>
         <div>
           <div>Skills</div>
-          <div>{text}</div>
+          <div className="">{text}</div>
         </div>
         <button className="bg-[#0A84FF] text-center p-[18px_24px] rounded-[12px]">
           Apply Now

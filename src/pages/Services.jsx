@@ -115,7 +115,7 @@ const Services = () => {
             deep expertise in machine learning and data engineering
           </div>
         </div>
-        <div className="mt-[40px] grid grid-cols-2  gap-[55px] ">
+        <div className="mt-[40px] grid grid-cols-2 gap-[55px] ">
           {servicesList.map((e, i) => {
             return <CardServ key={i} {...e} />;
           })}

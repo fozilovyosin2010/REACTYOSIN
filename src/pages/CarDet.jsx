@@ -217,9 +217,10 @@ const CarDet = () => {
                   type="number"
                   placeholder="Phone Number*"
                 />
-                <textarea className="outline-none bg-[#FFFFFF0D] rounded-[5px] p-[12px_14px]">
-                  Application Submissioncwe
-                </textarea>
+                <textarea
+                  defaultValue={"Application Submissioncwe"}
+                  className="outline-none bg-[#FFFFFF0D] rounded-[5px] p-[12px_14px]"
+                ></textarea>
                 <button className="bg-[#0A84FF] p-[10px_14px] rounded-[5px]">
                   Submit Application
                 </button>
@@ -231,7 +232,9 @@ const CarDet = () => {
           </div>
         </div>
         <div className="container3 mt-[40px]">
-          <div className="font-[600] text-[36px]">Similar Positions</div>
+          <div className="font-[600] text-[36px] py-[20px]">
+            Similar Positions
+          </div>
           <div className="grid grid-cols-2 gap-[20px]">
             {careerList.map((e, i) => {
               return <CardVac key={i} {...e} />;
