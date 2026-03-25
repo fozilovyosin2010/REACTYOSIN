@@ -4,6 +4,7 @@ import Layout from "./Layout/Layout";
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Service from "./Pages/Service";
+import ProductById from "./Pages/ProductById";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             {/* sub page */}
             <Route path="service" element={<Service />} />
           </Route>
+          <Route path="product/:productId" element={<ProductById />} />
         </Route>
       </Routes>
     </BrowserRouter>
