@@ -1,13 +1,12 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import React, { lazy, Suspense } from "react";
+
 import Layout from "./Layout/Layout";
-import Home from "./pages/Home";
-import About from "./pages/Services";
+
 import NotFound from "./pages/NotFound";
-import Services from "./pages/Services";
-import Careers from "./pages/Careers";
-import CarDet from "./pages/CarDet";
-import Contact from "./pages/Contact";
+import { createBrowserRouter, RouterProvider } from "react-router";
+
+const Home = lazy(() => import("./pages/Home"));
+const Services = lazy(() => import("./pages/Services"));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -16,11 +15,22 @@ const App = () => {
       element: <Layout />,
       children: [
         // first page to show in web app
-        { index: true, element: <Home /> },
-        { path: "/services", element: <Services /> },
-        { path: "/careers", element: <Careers /> },
-        { path: "/career_details", element: <CarDet /> },
-        { path: "/contact", element: <Contact /> },
+        {
+          index: true,
+          element: (
+            <Suspense fallback={<div>Loading</div>}>
+              <Home />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/services",
+          element: (
+            <Suspense fallback={<div>Loading</div>}>
+              <Services />
+            </Suspense>
+          ),
+        },
         { path: "*", element: <NotFound /> },
       ],
     },
