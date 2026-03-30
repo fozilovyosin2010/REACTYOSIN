@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from "react";
 
 const Card = React.memo(({ onClick, counter }) => {
-  console.log("child renders");
-
   const cntCard = useMemo(() => {
     console.log("counter is changed");
 
-    return counter;
+    return counter + 2;
   }, [counter]);
+
+  console.log("child renders");
 
   return (
     <div className="flex gap-3">

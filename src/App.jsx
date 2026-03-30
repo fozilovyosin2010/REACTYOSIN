@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Card from "./Component/Card";
 
 const App = () => {
-  console.log("parent renders");
-
   // parent
   const [cnt, setCnt] = useState(0);
 
@@ -23,6 +21,8 @@ const App = () => {
   const handleCardBtn = useCallback(() => {
     console.log("child is clicked!");
   }, []);
+
+  console.log("parent renders");
 
   return (
     <div>
