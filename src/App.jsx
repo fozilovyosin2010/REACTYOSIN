@@ -1,4 +1,25 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import MenuBtn from "./Component/MenuBtn";
+
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import IconButton from "@mui/material/IconButton";
+
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 const App = () => {
   // const [state, dispatch] = useReducer(reducer, initialState);
@@ -35,59 +56,143 @@ const App = () => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // delData
   function handleDelBtn(id) {
     dispatch({ key: "del", value: id });
   }
 
+  // checkData
   function handleChekcBtn(id) {
     dispatch({ key: "check", value: id });
   }
 
+  const [openAdd, setOpenAdd] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenAdd(true);
+  };
+
+  const handleClose = () => {
+    setOpenAdd(false);
+  };
+
+  const handleSubmitAdd = (event) => {
+    event.preventDefault();
+
+    const obj = {
+      id: new Date().getTime(),
+      name: event.target["name"].value.trim(),
+      age: event.target["age"].value.trim(),
+    };
+    handleClose();
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
   return (
     <div className="p-4">
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Complete</th>
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.data.map((e) => {
-            return (
-              <tr key={e.id} className="p-4">
-                <td>{e.name}</td>
-                <td>{e.age}</td>
-                <td>
+      <div className="header">
+        <IconButton>
+          <AddCircleOutlineIcon />
+        </IconButton>
+      </div>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="right">Age</StyledTableCell>
+              <StyledTableCell align="right">Status</StyledTableCell>
+              <StyledTableCell align="right">Options</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {state.data.map((elem) => (
+              <StyledTableRow key={elem.id}>
+                <StyledTableCell component="th" scope="row">
+                  {elem.name}
+                </StyledTableCell>
+                <StyledTableCell align="right">{elem.age}</StyledTableCell>
+                <StyledTableCell align="right">
                   <span
-                    className={`${e.status ? "bg-blue-500" : "bg-red-500"} text-[#fff] font-[700] p-2`}
+                    className={`${elem.status ? "bg-blue-500" : "bg-red-500"} p-[10px_15px] text-[#fff] text-[12px] font-[600] rounded-[15px]`}
                   >
-                    {e.status ? "ACTIVE" : "INACTIVE"}
+                    {elem.status ? "ACTIVE" : "INACTIVE"}
                   </span>
-                </td>
-                <td>
-                  <div className="flex  gap-3">
-                    <button
-                      className="px-2 py-1 bg-red-500"
-                      onClick={() => handleDelBtn(e.id)}
-                    >
-                      Del
-                    </button>
-                    <button
-                      className="px-2 py-1 bg-blue-500"
-                      onClick={() => handleChekcBtn(e.id)}
-                    >
-                      Complete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <MenuBtn
+                    btnCheck={() => handleChekcBtn(elem.id)}
+                    btnDel={() => handleDelBtn(elem.id)}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open form dialog
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here.
+            We will send updates occasionally.
+          </DialogContentText>
+          <form onSubmit={handleSubmitAdd} id="subscription-form">
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="age"
+              name="age"
+              label="Age"
+              type="number"
+              fullWidth
+              variant="standard"
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="contained" type="submit" form="subscription-form">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
