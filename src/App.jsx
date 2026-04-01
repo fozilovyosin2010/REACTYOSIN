@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -21,6 +21,26 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
 const App = () => {
   // const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -33,7 +53,10 @@ const App = () => {
 
   function reducer(state, action) {
     if (action.key === "del") {
-      return { data: state.data.filter((e) => e.id !== action.value) };
+      return {
+        ...state,
+        data: state.data.filter((e) => e.id !== action.value),
+      };
     } else if (action.key === "check") {
       const arr = state.data.map((e) => {
         if (e.id === action.value) {
@@ -42,7 +65,37 @@ const App = () => {
         return e;
       });
 
-      return { data: arr };
+      return { ...state, data: arr };
+    } else if (action.key === "add") {
+      return { ...state, data: [...state.data, action.value] };
+    }
+    // open edit
+    else if (action.key === "openEdit") {
+      const { id, name, age } = action.value;
+
+      return { ...state, idxEdit: id, nameEdit: name, ageEdit: age };
+    }
+    // close edit
+    else if (action.key === "closeEdit") {
+      return { ...state, idxEdit: "", id: null, ageEdit: 0 };
+    }
+    // for inps of formEdit
+    else if (action.key === "setNameEdit") {
+      return { ...state, nameEdit: action.value };
+    } else if (action.key === "setAgeEdit") {
+      return { ...state, ageEdit: action.value };
+    }
+
+    // edit data
+    else if (action.key === "edit") {
+      const arr = state.data.map((e) => {
+        if (e.id === action.value.id) {
+          e = { ...e, ...action.value };
+        }
+        return e;
+      });
+
+      return { ...state, data: arr };
     }
   }
 
@@ -52,27 +105,31 @@ const App = () => {
       { id: 2, name: "Yosin", age: 16, status: true },
       { id: 4, name: "John", age: 18, status: true },
     ],
+
+    idxEdit: null,
+    nameEdit: "",
+    ageEdit: 0,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // delData
-  function handleDelBtn(id) {
+  const handleDelBtn = useCallback((id) => {
     dispatch({ key: "del", value: id });
-  }
+  }, []);
 
   // checkData
-  function handleChekcBtn(id) {
+  const handleChekcBtn = useCallback((id) => {
     dispatch({ key: "check", value: id });
-  }
+  }, []);
 
   const [openAdd, setOpenAdd] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpenAdd = () => {
     setOpenAdd(true);
   };
 
-  const handleClose = () => {
+  const handleCloseAdd = () => {
     setOpenAdd(false);
   };
 
@@ -83,34 +140,57 @@ const App = () => {
       id: new Date().getTime(),
       name: event.target["name"].value.trim(),
       age: event.target["age"].value.trim(),
+      status: false,
     };
-    handleClose();
+
+    dispatch({ key: "add", value: obj });
+    handleCloseAdd();
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
+  const [openEdit, setOpenEdit] = useState(false);
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
+  const handleClickOpenEdit = useCallback((elem) => {
+    setOpenEdit(true);
+
+    // setTimeout(() => {
+    dispatch({
+      key: "openEdit",
+      value: {
+        id: elem.id,
+        name: elem.name,
+        age: elem.age,
+      },
+    });
+    // }, 0);
+  }, []);
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+
+    dispatch({ key: "closeEdit" });
+  };
+
+  const handleSubmitEdit = (event) => {
+    event.preventDefault();
+
+    const obj = {
+      id: state.idxEdit,
+      name: state.nameEdit.trim(),
+      age: state.ageEdit,
+    };
+
+    console.log(obj);
+
+    dispatch({ key: "edit", value: obj });
+    handleCloseEdit();
+  };
+
+  console.log("parent renders");
 
   return (
     <div className="p-4">
-      <div className="header">
-        <IconButton>
+      <div className="header py-4">
+        <IconButton onClick={handleClickOpenAdd} sx={{ color: "blue" }}>
           <AddCircleOutlineIcon />
         </IconButton>
       </div>
@@ -125,7 +205,7 @@ const App = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {state.data.map((elem) => (
+            {state?.data?.map((elem) => (
               <StyledTableRow key={elem.id}>
                 <StyledTableCell component="th" scope="row">
                   {elem.name}
@@ -140,8 +220,12 @@ const App = () => {
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <MenuBtn
-                    btnCheck={() => handleChekcBtn(elem.id)}
-                    btnDel={() => handleDelBtn(elem.id)}
+                    id={elem.id}
+                    name={elem.name}
+                    age={elem.age}
+                    btnCheck={handleChekcBtn}
+                    btnDel={handleDelBtn}
+                    btnEdit={handleClickOpenEdit}
                   />
                 </StyledTableCell>
               </StyledTableRow>
@@ -149,10 +233,9 @@ const App = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+
+      {/* add modal */}
+      <Dialog open={openAdd} onClose={handleCloseAdd}>
         <DialogTitle>Add</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -185,11 +268,62 @@ const App = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={handleCloseAdd}>
             Cancel
           </Button>
           <Button variant="contained" type="submit" form="subscription-form">
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* edit modal */}
+      <Dialog open={openEdit} onClose={handleCloseEdit}>
+        <DialogTitle>Edit</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here.
+            We will send updates occasionally.
+          </DialogContentText>
+          <form onSubmit={handleSubmitEdit} id="subscription-form">
+            <TextField
+              value={state?.nameEdit}
+              onChange={(e) =>
+                dispatch({ key: "setNameEdit", value: e.target.value })
+              }
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              value={state.ageEdit}
+              onChange={(e) =>
+                dispatch({ key: "setAgeEdit", value: e.target.value })
+              }
+              autoFocus
+              required
+              margin="dense"
+              id="age"
+              name="age"
+              label="Age"
+              type="number"
+              fullWidth
+              variant="standard"
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleCloseEdit}>
+            Cancel
+          </Button>
+          <Button variant="contained" type="submit" form="subscription-form">
+            Edit
           </Button>
         </DialogActions>
       </Dialog>

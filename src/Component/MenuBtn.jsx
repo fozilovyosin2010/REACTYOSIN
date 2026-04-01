@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import Button from "@mui/material/Button";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import EditIcon from "@mui/icons-material/Edit";
 
-const MenuBtn = ({ btnDel, btnCheck }) => {
+const MenuBtn = ({ id, age, name, btnDel, btnCheck, btnEdit }) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -49,6 +49,14 @@ const MenuBtn = ({ btnDel, btnCheck }) => {
 
     prevOpen.current = open;
   }, [open]);
+
+  const obj = {
+    id: id,
+    age: age,
+    name: name,
+  };
+
+  console.log("child renders");
 
   return (
     <div>
@@ -88,13 +96,19 @@ const MenuBtn = ({ btnDel, btnCheck }) => {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={btnDel} sx={{ color: "red" }}>
+                    <MenuItem onClick={() => btnDel(id)} sx={{ color: "red" }}>
                       <DeleteIcon />
                     </MenuItem>
-                    <MenuItem onClick={btnCheck} sx={{ color: "green" }}>
+                    <MenuItem
+                      onClick={() => btnCheck(id)}
+                      sx={{ color: "green" }}
+                    >
                       <TaskAltIcon />
                     </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{ color: "blue" }}>
+                    <MenuItem
+                      onClick={() => btnEdit(obj)}
+                      sx={{ color: "blue" }}
+                    >
                       <EditIcon />
                     </MenuItem>
                   </MenuList>
@@ -108,4 +122,4 @@ const MenuBtn = ({ btnDel, btnCheck }) => {
   );
 };
 
-export default MenuBtn;
+export default React.memo(MenuBtn);
